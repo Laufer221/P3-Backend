@@ -20,7 +20,7 @@ public class RelationFinder {
 	 * @param dict
 	 * 			The dictionary to be used; may not be <code>null</code>
 	 * @throws NullPointerException
-	 *           If the specified dictionary is <code>null</code>
+	 *			If the specified dictionary is <code>null</code>
 	 */
 	public RelationFinder(IDictionary dict) {
         if(dict == null)
