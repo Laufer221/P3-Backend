@@ -13,6 +13,7 @@ import edu.mit.jwi.morph.WordnetStemmer;
 public class RelationFinder {
 	
 	private final IDictionary dict;
+	private final WordnetStemmer stemmer;
 	
 	/**
 	 * Constructs a RelationFinder that requires a Wordnet dictionary.
@@ -26,6 +27,7 @@ public class RelationFinder {
         if(dict == null)
         	throw new NullPointerException();
         this.dict = dict;
+        this.stemmer = new WordnetStemmer(dict);
     }
 	
 	/** 
@@ -49,7 +51,6 @@ public class RelationFinder {
 	 * 
 	 */
 	public ArrayList<String> findStringSynonyms(String str) {
-		WordnetStemmer stemmer = new WordnetStemmer(dict);
 		ArrayList<String> stemsList = new ArrayList<String>();
 		ArrayList<String> synonymList = new ArrayList<String>();
 		
