@@ -91,7 +91,7 @@ public class RelationFinder {
 	 * 			Returns true if a word from the first string has a related word in the second string
 	 * 
 	 */
-	public boolean relatedInString(String str1, String str2) {
+	public boolean shareSynonyms(String str1, String str2) {
 		//Create synonym arrays for both strings
 		ArrayList<String> str1Synonyms = findStringSynonyms(str1);
 		ArrayList<String> str2Synonyms = findStringSynonyms(str2);
@@ -118,7 +118,7 @@ public class RelationFinder {
 	 * 			Returns true if a word from the string has a synonym in the list
 	 * 
 	 */
-	public boolean relatedInString(String str, ArrayList<String> synonymList) {
+	public boolean shareSynonyms(String str, ArrayList<String> synonymList) {
 		//Create a synonym array for the string
 		ArrayList<String> strSynonyms = findStringSynonyms(str);
 				
@@ -131,4 +131,27 @@ public class RelationFinder {
 		//If no related words are shared, return false
 		return false;
 	}
+	
+	/**
+	 * This method accepts two lists of synonyms, and determines if any words are shared between them.
+	 * 
+	 * @param synonymList1
+	 * 			The first list of synonyms to be compared 
+	 * @param synonymList2
+	 * 			The second list of synonyms to be compared
+	 * @return boolean 
+	 * 			Returns true if any words are shared between the synonym lists
+	 * 
+	 */
+	public boolean shareSynonyms(ArrayList<String> synonymList1, ArrayList<String> synonymList2) {	
+		//If any words from the first list are found in the second list, return true
+		for (String word : synonymList1) {
+			if (synonymList2.contains(word)){
+				return true;
+			}
+		}
+		//If no related words are shared, return false
+		return false;
+	}
 }
+
