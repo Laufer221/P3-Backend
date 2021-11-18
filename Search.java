@@ -5,9 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import edu.mit.jwi.DataSourceDictionary;
-import edu.mit.jwi.data.FileProvider;
-
 import csc450.RelationFinder;
 
 
@@ -24,29 +21,33 @@ public class Search {
 	 * @return
 	 * 			Returns a list of all the text files that matched the query
 	 */
-	static ArrayList<File> searchTextFiles(String query, ArrayList<File> textFileList) {
-		//Setup dictionary for use in the synonym finder
-		String url_name = ""; //TODO: Insert url of dictionary provider
-		java.net.URL url = new java.net.URL(url_name);
-		FileProvider dictionaryProvider = new FileProvider(url);
-		DataSourceDictionary dict = new DataSourceDictionary(dictionaryProvider);
-		RelationFinder synonymFinder = new RelationFinder(dict);
+	static ArrayList<File> searchTextFiles(String query, ArrayList<File> textFileList) 
+	{
+		RelationFinder stemFinder = new RelationFinder();
 		
 		ArrayList<File> resultsList = new ArrayList<File>();
-		ArrayList<String> querySynonyms = synonymFinder.findStringSynonyms(query);
+		ArrayList<String> queryStems = stemFinder.findStringStems(query);
 		
-		for (File textFile : textFileList) {
+		for (File textFile : textFileList) 
+		{
 			Scanner reader;
-			try {
+			try 
+			{
 				reader = new Scanner(textFile);
-			} catch (FileNotFoundException e) {
+			} 
+			catch (FileNotFoundException e) 
+			{
 				continue;
 			}
+			//
 			String textFileContents = "";
-			while (reader.hasNextLine()) {
+			while (reader.hasNextLine()) 
+			{
 				textFileContents += reader.nextLine();
 			}
-			if (synonymFinder.shareSynonyms(textFileContents, querySynonyms)) {
+			//
+			if (stemFinder.shareStems(textFileContents, queryStems)) 
+			{
 				resultsList.add(textFile);
 			}
 			reader.close();
@@ -55,4 +56,32 @@ public class Search {
 		return resultsList;
 	}
 
+	/**
+	 * This method searches through a list of strings, and returns a list of all strings
+	 * that contained words relating to a provided query.
+	 * 
+	 * @param query
+	 * 			The user's query, in the form of a string
+	 * @param StringList
+	 * 			A list of strings pulled from the database
+	 * @return
+	 * 			Returns a list of all the strings that matched the query
+	 */
+	static ArrayList<String> searchStrings(String query, ArrayList<String> StringList) 
+	{
+		RelationFinder stemFinder = new RelationFinder();
+		
+		ArrayList<String> resultsList = new ArrayList<String>();
+		ArrayList<String> queryStems = stemFinder.findStringStems(query);
+		
+		for (String str : StringList) 
+		{
+			if (stemFinder.shareStems(str, queryStems)) 
+			{
+				resultsList.add(str);
+			}
+		}
+		
+		return resultsList;
+	}
 }
