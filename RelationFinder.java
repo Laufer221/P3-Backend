@@ -1,83 +1,49 @@
 package csc450;
 
 import java.util.ArrayList;
+import edu.mit.jwi.morph.SimpleStemmer;
 
-import edu.mit.jwi.IDictionary;
-import edu.mit.jwi.item.IIndexWord;
-import edu.mit.jwi.item.ISynset;
-import edu.mit.jwi.item.IWord;
-import edu.mit.jwi.item.IWordID;
-import edu.mit.jwi.item.POS;
-import edu.mit.jwi.morph.WordnetStemmer;
-
-public class RelationFinder {
+public class RelationFinder 
+{
 	
-	private final IDictionary dict;
-	private final WordnetStemmer stemmer;
+	private final SimpleStemmer stemmer;
 	
 	/**
-	 * Constructs a RelationFinder that requires a Wordnet dictionary.
+	 * Constructs a RelationFinder that uses a simple stemmer to function.
 	 * 
 	 * @param dict
 	 * 			The dictionary to be used; may not be <code>null</code>
 	 * @throws NullPointerException
 	 *			If the specified dictionary is <code>null</code>
 	 */
-	public RelationFinder(IDictionary dict) {
-        if(dict == null)
-        	throw new NullPointerException();
-        this.dict = dict;
-        this.stemmer = new WordnetStemmer(dict);
+	public RelationFinder() 
+	{
+        this.stemmer = new SimpleStemmer();
     }
 	
-	/** 
-     * Returns the dictionary in use by the relation finder; will not return <code>null</code>
-     *
-     * @return the dictionary in use by this relation finder
-     */
-    public IDictionary getDictionary(){
-    	return dict;
-    }
 	
 	/**
-	 * This method creates a list of all synonyms for every word in the provided string.
-	 * Based on the synonym-finding method provided by the user neo m in:
-	 * https://stackoverflow.com/questions/25339856/get-synonym-of-word-with-jwi
+	 * This method creates a list of all stems for every word in the provided string.
 	 * 
 	 * @param str
 	 * 			The string to be processed
 	 * @return ArrayList<String> 
-	 * 			Returns a list of all synonyms for words in the given string
+	 * 			Returns a list of all stems for words in the given string
 	 * 
 	 */
-	public ArrayList<String> findStringSynonyms(String str) {
+	public ArrayList<String> findStringStems(String str) 
+	{
 		ArrayList<String> stemsList = new ArrayList<String>();
-		ArrayList<String> synonymList = new ArrayList<String>();
 		
 		//Split the provided string into separate words, and find the stems of those words
-		for (String word : str.split(" ", 0)) {
-			for (String stem : stemmer.findStems(word, null)) {
+		for (String word : str.split(" ", 0)) 
+		{
+			for (String stem : stemmer.findStems(word, null)) 
+			{
 				stemsList.add(stem);
 			}
 		}
-		
-		//For each word stem, find all of the synonyms and add them to the list, skipping redundancies
-		for (String stem : stemsList){
-			for (POS p : POS.values()) {
-				IIndexWord idxWord = dict.getIndexWord(stem, p);
-				if (idxWord != null) {
-        			IWordID wordID = idxWord.getWordIDs().get(0);
-       				IWord word = dict.getWord(wordID);
-        			ISynset synset = word.getSynset();
-        			for (IWord w : synset.getWords()) {
-            			if (!synonymList.contains(w.getLemma())) {
-            				synonymList.add(w.getLemma());
-            			}
-        			}
-				}
-			}
-		}
-		return synonymList;
+		return stemsList;
 	}
 	
 	/**
@@ -91,14 +57,17 @@ public class RelationFinder {
 	 * 			Returns true if a word from the first string has a related word in the second string
 	 * 
 	 */
-	public boolean shareSynonyms(String str1, String str2) {
+	public boolean shareStems(String str1, String str2) 
+	{
 		//Create synonym arrays for both strings
-		ArrayList<String> str1Synonyms = findStringSynonyms(str1);
-		ArrayList<String> str2Synonyms = findStringSynonyms(str2);
+		ArrayList<String> str1Stems = findStringStems(str1);
+		ArrayList<String> str2Stems = findStringStems(str2);
 		
 		//If any words are shared between the synonym arrays, then the two strings share related words
-		for (String word : str1Synonyms) {
-			if (str2Synonyms.contains(word)){
+		for (String word : str1Stems) 
+		{
+			if (str2Stems.contains(word))
+			{
 				return true;
 			}
 		}
@@ -107,24 +76,27 @@ public class RelationFinder {
 	}
 	
 	/**
-	 * This method accepts a string and list of synonyms, and determines if any words from the string
-	 * have synonyms from the list.
+	 * This method accepts a string and list of stems, and determines if any words from the string
+	 * have stems from the list.
 	 * 
 	 * @param str
 	 * 			The string to be compared
-	 * @param synonymList
-	 * 			A list of synonyms to be compared with the string
+	 * @param stemList
+	 * 			A list of stems to be compared with the string
 	 * @return boolean 
-	 * 			Returns true if a word from the string has a synonym in the list
+	 * 			Returns true if a word from the string has a stem in the list
 	 * 
 	 */
-	public boolean shareSynonyms(String str, ArrayList<String> synonymList) {
+	public boolean shareStems(String str, ArrayList<String> stemList) 
+	{
 		//Create a synonym array for the string
-		ArrayList<String> strSynonyms = findStringSynonyms(str);
+		ArrayList<String> strStems = findStringStems(str);
 				
-		//If any words from the string have synonyms in the provided synonym list, return true
-		for (String word : synonymList) {
-			if (strSynonyms.contains(word)){
+		//If any words from the string have stems in the provided synonym list, return true
+		for (String word : stemList) 
+		{
+			if (strStems.contains(word))
+			{
 				return true;
 			}
 		}
@@ -133,20 +105,23 @@ public class RelationFinder {
 	}
 	
 	/**
-	 * This method accepts two lists of synonyms, and determines if any words are shared between them.
+	 * This method accepts two lists of stems, and determines if any words are shared between them.
 	 * 
-	 * @param synonymList1
-	 * 			The first list of synonyms to be compared 
-	 * @param synonymList2
-	 * 			The second list of synonyms to be compared
+	 * @param stemList1
+	 * 			The first list of stems to be compared 
+	 * @param stemList2
+	 * 			The second list of stems to be compared
 	 * @return boolean 
-	 * 			Returns true if any words are shared between the synonym lists
+	 * 			Returns true if any words are shared between the stems lists
 	 * 
 	 */
-	public boolean shareSynonyms(ArrayList<String> synonymList1, ArrayList<String> synonymList2) {	
+	public boolean shareStems(ArrayList<String> stemList1, ArrayList<String> stemList2) 
+	{	
 		//If any words from the first list are found in the second list, return true
-		for (String word : synonymList1) {
-			if (synonymList2.contains(word)){
+		for (String word : stemList1) 
+		{
+			if (stemList2.contains(word))
+			{
 				return true;
 			}
 		}
@@ -154,4 +129,3 @@ public class RelationFinder {
 		return false;
 	}
 }
-
