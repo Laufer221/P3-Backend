@@ -6,21 +6,7 @@ import edu.mit.jwi.morph.SimpleStemmer;
 public class RelationFinder 
 {
 	
-	private final SimpleStemmer stemmer;
-	
-	/**
-	 * Constructs a RelationFinder that uses a simple stemmer to function.
-	 * 
-	 * @param dict
-	 * 			The dictionary to be used; may not be <code>null</code>
-	 * @throws NullPointerException
-	 *			If the specified dictionary is <code>null</code>
-	 */
-	public RelationFinder() 
-	{
-        this.stemmer = new SimpleStemmer();
-    }
-	
+	static private final SimpleStemmer stemmer = new SimpleStemmer();
 	
 	/**
 	 * This method creates a list of all stems for every word in the provided string.
@@ -31,7 +17,7 @@ public class RelationFinder
 	 * 			Returns a list of all stems for words in the given string
 	 * 
 	 */
-	public ArrayList<String> findStringStems(String str) 
+	static ArrayList<String> findStringStems(String str) 
 	{
 		ArrayList<String> stemsList = new ArrayList<String>();
 		
@@ -57,7 +43,7 @@ public class RelationFinder
 	 * 			Returns true if a word from the first string has a related word in the second string
 	 * 
 	 */
-	public boolean shareStems(String str1, String str2) 
+	static boolean shareStems(String str1, String str2) 
 	{
 		//Create synonym arrays for both strings
 		ArrayList<String> str1Stems = findStringStems(str1);
@@ -87,7 +73,7 @@ public class RelationFinder
 	 * 			Returns true if a word from the string has a stem in the list
 	 * 
 	 */
-	public boolean shareStems(String str, ArrayList<String> stemList) 
+	static boolean shareStems(String str, ArrayList<String> stemList) 
 	{
 		//Create a synonym array for the string
 		ArrayList<String> strStems = findStringStems(str);
@@ -115,7 +101,7 @@ public class RelationFinder
 	 * 			Returns true if any words are shared between the stems lists
 	 * 
 	 */
-	public boolean shareStems(ArrayList<String> stemList1, ArrayList<String> stemList2) 
+	static boolean shareStems(ArrayList<String> stemList1, ArrayList<String> stemList2) 
 	{	
 		//If any words from the first list are found in the second list, return true
 		for (String word : stemList1) 
