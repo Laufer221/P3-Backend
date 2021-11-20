@@ -22,11 +22,9 @@ public class Search {
 	 * 			Returns a list of all the text files that matched the query
 	 */
 	static ArrayList<File> searchTextFiles(String query, ArrayList<File> textFileList) 
-	{
-		RelationFinder stemFinder = new RelationFinder();
-		
+	{	
 		ArrayList<File> resultsList = new ArrayList<File>();
-		ArrayList<String> queryStems = stemFinder.findStringStems(query);
+		ArrayList<String> queryStems = RelationFinder.findStringStems(query);
 		
 		for (File textFile : textFileList) 
 		{
@@ -46,7 +44,7 @@ public class Search {
 				textFileContents += reader.nextLine();
 			}
 			//
-			if (stemFinder.shareStems(textFileContents, queryStems)) 
+			if (RelationFinder.shareStems(textFileContents, queryStems)) 
 			{
 				resultsList.add(textFile);
 			}
@@ -68,15 +66,13 @@ public class Search {
 	 * 			Returns a list of all the strings that matched the query
 	 */
 	static ArrayList<String> searchStrings(String query, ArrayList<String> StringList) 
-	{
-		RelationFinder stemFinder = new RelationFinder();
-		
+	{	
 		ArrayList<String> resultsList = new ArrayList<String>();
-		ArrayList<String> queryStems = stemFinder.findStringStems(query);
+		ArrayList<String> queryStems = RelationFinder.findStringStems(query);
 		
 		for (String str : StringList) 
 		{
-			if (stemFinder.shareStems(str, queryStems)) 
+			if (RelationFinder.shareStems(str, queryStems)) 
 			{
 				resultsList.add(str);
 			}
