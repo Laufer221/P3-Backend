@@ -28,6 +28,7 @@ public class Search {
 		
 		for (File textFile : textFileList) 
 		{
+			//Attempt to open the text file
 			Scanner reader;
 			try 
 			{
@@ -37,13 +38,13 @@ public class Search {
 			{
 				continue;
 			}
-			//
+			//Read the file's contents into a string
 			String textFileContents = "";
 			while (reader.hasNextLine()) 
 			{
 				textFileContents += reader.nextLine();
 			}
-			//
+			//If any keywords are shared between the file and the query, add the file to the list of results
 			if (RelationFinder.shareStems(textFileContents, queryStems)) 
 			{
 				resultsList.add(textFile);
@@ -72,6 +73,7 @@ public class Search {
 		
 		for (String str : StringList) 
 		{
+			//If any keywords are shared between the string and the query, add the string to the list of results
 			if (RelationFinder.shareStems(str, queryStems)) 
 			{
 				resultsList.add(str);
