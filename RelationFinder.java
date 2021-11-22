@@ -22,7 +22,7 @@ public class RelationFinder
 		ArrayList<String> stemsList = new ArrayList<String>();
 		
 		//Split the provided string into separate words, and find the stems of those words
-		for (String word : str.split(" ", 0))
+		for (String word : str.split("\\W++", 0))
 		{
 			stemsList.add(word.toLowerCase());
 			stemsList.addAll(stemmer.findStems(word, null));
